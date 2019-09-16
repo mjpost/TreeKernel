@@ -137,5 +137,11 @@ int main()
    // hand-counted; number of non-terminal nodes
    test_st("brought a cat", g_brought_a_cat, g_brought_a_cat, 5);
 
+   string line;
+   while (getline(cin, line)) {
+     double value = kernel_value(line, line, true);
+     cout << line << ": " << value << endl;
+   }
+
    return 0;
 }
