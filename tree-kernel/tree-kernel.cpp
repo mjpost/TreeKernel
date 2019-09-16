@@ -66,8 +66,10 @@ double get_delta(NodePairsDeltaTable& delta_table,
           !"sigma isn't tunable, it's got to be 0 or 1; it's a choice of algorithm");
    double& ref_delta = delta_ref_at(delta_table, n1, n2);
    if (ref_delta == 0.0) {
-      // needs calculating - all nodes we'll see are > 0.
-      if (n1->is_preterminal() and n2->is_preterminal()) {
+      // removing preterminal requirement over terminals means we could see 0s here
+      if (n1 == 0 and n2 == 0) {
+         return 0;
+      } else if (n1->is_preterminal() and n2->is_preterminal()) {
          // We're treating the tree purely structurally, or by
          // part-of-speech by doing this...
          // wait a minute - 'include_leaves' is done ahead of time..

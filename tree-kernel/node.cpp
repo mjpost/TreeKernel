@@ -103,9 +103,9 @@ Node::Nodes Node::children() const
          assert(it->node());
          childs.push_back(it->node());
       }
-      else {
-         assert(false);
-      }
+      // else {
+      //    assert(false);
+      // }
    }
    return childs;
 }
