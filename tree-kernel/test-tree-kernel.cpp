@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tree_parser.h"
 #include "tree-kernel.h"
 #include "sentence.h"
+#include "util.h"
 
 using namespace std;
 
@@ -52,40 +53,6 @@ string g_brought_a_cat =
 "     (NP (D a)"
 "         (N cat)))"
    ;
-
-Tree const* make_tree(string const& tree_text)
-{
-   TreeLexer lexer(tree_text);
-   TreeParser parser(lexer);
-   Tree const* t = 0;
-   try {
-      t = parser.match_and_eat_tree();
-   }
-   catch (string& ex) {
-      cout << "failed parse: " << ex << endl;
-   }
-
-//   t->pretty_print(cout, 0);
-
-   return t;
-}
-
-double kernel_value(string one, string two, bool want_sst_not_st)
-{
-   Tree const* t1 = make_tree(one);
-   Tree const* t2 = make_tree(two);
-
-   cout << "s1" << endl;
-   Sentence s1(t1);
-   cout << "s2" << endl;
-   Sentence s2(t2);
-
-   // sigma == 1 is SSTs (fragments)
-   // sigma == 0 is STs (whole sub-trees, down to leaves)
-   int sigma = want_sst_not_st ? 1 : 0;
-   double value = kernel_value(s1, s2, sigma);
-   return value;
-}
 
 void test_sst(string test_name, string one, string two, double expected)
 {
