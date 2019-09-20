@@ -38,7 +38,7 @@ public:
    }
 
    bool isLETTER() {
-      return isalpha(c) or c == '.' or c == '\'' or c == '`';
+     return isalpha(c) or c == '.' or c == '\'' or c == '`' or c == ',' or c == '$';
    }
 
 //   virtual std::string const& getTokenName(int x) const { return Lexer::s_token_names[x]; }
