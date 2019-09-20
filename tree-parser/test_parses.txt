@@ -1,0 +1,20 @@
+(ROOT
+  (S
+    (NP (NNP Never))
+    (VP (VBZ has)
+      (NP
+        (NP (DT the) (NN term))
+        (SBAR
+          (S (`` ``)
+            (S
+              (VP (VBG massaging)
+                (NP (DT the) (NNS media))))
+            ('' '')
+            (VP (VBD seemed)
+              (ADJP (RB so) (JJ accurate)))))))
+    (. .)))
+(tag elt)
+(a b c d)
+(a b (c (d (e f))))
+(ROOT (S (VP (MD must) (VP (VB have) (NP (NN java)))) (. .)))
+( (S (NP DT NNP) , (PP IN (NP PRP$ NN)) , (VP (VP VBZ ADVP VP) CC (VP VBZ S)) .))    ( (S (NP DT NNP) , (PP IN (NP PRP$ NN)) , (VP (VP VBZ ADVP VP) CC (VP VBZ S)) .))

@@ -2,37 +2,6 @@
 
 using namespace std;
 
-string g_pretty =
-"(ROOT"
-"  (S"
-"    (NP (NNP Never))"
-"    (VP (VBZ has)"
-"      (NP"
-"        (NP (DT the) (NN term))"
-"        (SBAR"
-"          (S (`` ``)"
-"            (S"
-"              (VP (VBG massaging)"
-"                (NP (DT the) (NNS media))))"
-"            ('' '')"
-"            (VP (VBD seemed)"
-"              (ADJP (RB so) (JJ accurate)))))))"
-"    (. .)))"
-   ;
-
-string g_simple =
-   "(tag elt)";
-
-string g_flat =
-   "(a b c d)";
-
-string g_small =
-   "(a b (c (d (e f))))";
-
-
-string g_real =
-   "(ROOT (S (VP (MD must) (VP (VB have) (NP (NN java)))) (. .)))";
-
 void lex_only(string tree_text, string tree_name)
 {
    cout << "lexing..." << tree_name << endl;
@@ -64,7 +33,6 @@ void test_tree(string tree_text, string tree_name)
    if (t) {
 //      cout << "printing in order:" << endl;
 //      t->print_inorder(cout);
-      cout << "printing nice:" << endl;
       t->print_nice(cout, 0);
    }
 }
@@ -73,11 +41,12 @@ int main(int argc, char* argv[])
 {
   (void)argc;
   (void)argv;
-//   test_tree(g_simple, "test simple");
-   test_tree(g_flat, "test flat");
-   test_tree(g_small, "test small");
-   test_tree(g_real, "test real");
-   test_tree(g_pretty, "test pretty");
+  string line;
+  int lineno = 0;
+  while (getline(cin, line)) {
+    lineno++;
+    test_tree(line, to_string(lineno));
+  }
 
-   return 0;
+  return 0;
 }
