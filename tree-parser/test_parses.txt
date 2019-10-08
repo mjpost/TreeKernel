@@ -18,3 +18,5 @@
 (a b (c (d (e f))))
 (ROOT (S (VP (MD must) (VP (VB have) (NP (NN java)))) (. .)))
 ( (S (NP DT NNP) , (PP IN (NP PRP$ NN)) , (VP (VP VBZ ADVP VP) CC (VP VBZ S)) .))    ( (S (NP DT NNP) , (PP IN (NP PRP$ NN)) , (VP (VP VBZ ADVP VP) CC (VP VBZ S)) .))
+( (S (NP (CD 4) (NNP Kemerovo) (NN group) (NNS members)) (VP (VBN arrested) (PP (IN in) (NP (NNP Estonia) (CC and) (NNP Spain))))) )
+( (S (NP (CD Four) (NN Kemerovo)) (VP (VBN arrested) (PP (IN in) (NP (NNP Estonia) (CC and) (NNP Spain))))) )
