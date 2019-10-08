@@ -29,11 +29,26 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using namespace std;
 
 
-bool Node::is_preterminal() const
+/**
+ * Generalized preterminal function that returns true if all
+ * its children are non-nodes. This allows the code to work with
+ * more general CFGs that don't require a preterminal over every terminal.
+ */
+bool Node::is_terminal() const
 {
-   return children_.size() == 1 and children_[0].is_text();
+  for (Node::Children::const_iterator it = children_.begin(); it != children_.end(); it++) {
+    if (! it->is_text())
+      return false;
+  }
+  return true;
 }
 
+/**
+ * Returns 0 if the productions are exactly the same.
+ * Otherwise, returns the string comparison of the first
+ * non-equal component of the production, or finally the
+ * difference in the number of children.
+ */
 int Node::productions_cmp(Node const& one, Node const& two)
 {
    for (Node::Children::const_iterator i1 = one.children_.begin(), e1 = one.children_.end(),
@@ -48,11 +63,12 @@ int Node::productions_cmp(Node const& one, Node const& two)
 
 bool Node::productions_equal(Node const* one, Node const* two)
 {
-//   cout << "nodes=?" << one->id_string() << "; " << two->id_string();
+  //  cout << "nodes=?" << one->id_string() << "; " << two->id_string();
    // hoping for short-circuit speed, obviously
-   bool equal = one->children_.size() == two->children_.size() and
-      productions_cmp(*one, *two) == 0;
-//   cout << equal << endl;
+  bool equal = (one->label().compare(two->label()) == 0) and
+     one->children_.size() == two->children_.size() and
+     productions_cmp(*one, *two) == 0;
+   //   cout << equal << endl;
    return equal;
 }
 
@@ -73,18 +89,15 @@ bool Node::Child::production_component_is_less(Node::Child const& one,
 
 std::string Node::productions() const
 {
-   if (is_preterminal()) {
-      return children_[0].text();
-   }
-   else {
-      ostringstream oss;
-      for (Node::Children::const_iterator it = children_.begin(), end = children_.end();
-           it != end; ++it) {
-         assert((*it).is_node());
-         oss << (*it).node()->tag_ << " ";
-      }
-      return oss.str();
-   }
+  ostringstream oss;
+  for (Node::Children::const_iterator it = children_.begin(), end = children_.end();
+       it != end; ++it) {
+    if (it->is_node())
+      oss << it->node()->tag_ << " ";
+    else
+      oss << it->text() << " ";
+  }
+  return oss.str();
 }
 
 string Node::id_string() const
@@ -93,6 +106,7 @@ string Node::id_string() const
    oss << this->tag_ << ":" << this->productions();
    return oss.str();
 }
+
 //
 Node::Nodes Node::children() const
 {
