@@ -17,7 +17,7 @@ Tree const* make_tree(string const& tree_text)
    return t;
 }
 
-double kernel_value(string one, string two, bool want_sst_not_st)
+double kernel_value(string one, string two, bool want_sst_not_st = true)
 {
    Tree const* t1 = make_tree(one);
    Tree const* t2 = make_tree(two);
