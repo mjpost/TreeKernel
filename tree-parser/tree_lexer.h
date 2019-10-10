@@ -37,8 +37,11 @@ public:
 //      cout << "lexer, starting:" << this->c << endl;
    }
 
+   /**
+    * Match all characters except open and close parens and space.
+    */
    bool isLETTER() {
-     return (c != '(' and c != ')') and (isalnum(c) or ispunct(c));
+     return (c != '(' and c != ')' and c != ' ');
    }
 
 //   virtual std::string const& getTokenName(int x) const { return Lexer::s_token_names[x]; }

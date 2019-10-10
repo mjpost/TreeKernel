@@ -45,9 +45,12 @@ public:
    : tag_(tag)
    {}
 
-   /// pre-terminal is a node with a pure piece of text as only child
-   /// (each piece of text gets a unique parent).
-   bool is_preterminal() const;
+   const std::string& label() const {
+     return tag_;
+   }
+
+   // terminal nodes have no nodes as children
+   bool is_terminal() const;
 
    /// Typical 3-way comparison
    static int productions_cmp(Node const& one, Node const& two);
@@ -119,7 +122,8 @@ private:
                          two.production_component());
       }
       /// This child's part of the parent's production. Ok for both
-      /// full node and embedded string.
+      /// full node and embedded string. It returns the leaf name
+      /// for leaves or otherwise the nonterminal name.
       char const* production_component() const {
          if (is_text()) return text().c_str();
          else return node_->tag_.c_str();

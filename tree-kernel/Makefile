@@ -1,5 +1,5 @@
 CXXFLAGS=-O2 -Wall -Wextra
-CXX=g++
+CXX=g++ -std=c++0x
 INCLUDE=-I/usr/include -I../tree-parser
 LIB_SOURCES=\
 	node.cpp \

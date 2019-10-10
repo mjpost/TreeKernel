@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2011,2015 Jeff Donner
+Copyright (c) 2019 Matt Post
 
     Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation files
@@ -40,12 +41,6 @@ typedef std::vector<NodePair> NodePairs;
 typedef std::map<NodePair, double> NodePairsDeltaTable;
 
 static
-double preterminal_leaves_value(bool include_leaves, double lambda)
-{
-   return include_leaves ? lambda * 2 : lambda;
-}
-
-static
 double& delta_ref_at(NodePairsDeltaTable& delta_table,
                      Node const* n1, Node const* n2)
 {
@@ -58,36 +53,27 @@ static
 double get_delta(NodePairsDeltaTable& delta_table,
                  Node const* n1, Node const* n2,
                  int sigma,
-                 bool include_leaves,
-                 // use a lambda = 1.0 to give it no effect
                  double lambda)
 {
    assert((sigma == 0 or sigma == 1) or
           !"sigma isn't tunable, it's got to be 0 or 1; it's a choice of algorithm");
    double& ref_delta = delta_ref_at(delta_table, n1, n2);
-   if (ref_delta == 0.0) {
-      // removing preterminal requirement over terminals means we could see 0s here
-      if (n1 == 0 and n2 == 0) {
-         return 0;
-      } else if (n1->is_preterminal() and n2->is_preterminal()) {
-         // We're treating the tree purely structurally, or by
-         // part-of-speech by doing this...
-         // wait a minute - 'include_leaves' is done ahead of time..
-         ref_delta = preterminal_leaves_value(include_leaves, lambda);
-      } else {
-         ref_delta = lambda;
-         Node::Nodes n1_children = n1->children();
-         Node::Nodes n2_children = n2->children();
-         // non-pre-terminals
-         for (Node::Nodes::const_iterator
-                 it1 = n1_children.begin(), end1 = n1_children.end(),
-                 it2 = n2_children.begin(), end2 = n2_children.end();
-              it1 != end1; ++it1, ++it2) {
-            ref_delta *= sigma + get_delta(delta_table, *it1, *it2,
-                                           sigma, include_leaves, lambda);
-         }
-      }
+
+   // compute delta if it's not been computed
+   if (Node::productions_equal(n1, n2) and (not n1->is_terminal()) and (not n2->is_terminal()) and ref_delta == 0.0) {
+     // compute value for the first time
+     ref_delta = lambda;
+     Node::Nodes n1_children = n1->children();
+     Node::Nodes n2_children = n2->children();
+       
+     for (Node::Nodes::const_iterator
+            it1 = n1_children.begin(), end1 = n1_children.end(),
+            it2 = n2_children.begin(), end2 = n2_children.end();
+          it1 != end1; ++it1, ++it2) {
+       ref_delta *= sigma + get_delta(delta_table, *it1, *it2, sigma, lambda);
+     }
    }
+
    return ref_delta;
 }
 
@@ -125,18 +111,20 @@ NodePairs find_non_zero_delta_pairs(
          assert(n1);
          assert(n2);
          // run along the 'runs'
-         while (i2 != end2 and Node::productions_equal(*i1, *i2)) {
+         while (i2 != end2 and Node::productions_equal(*i1, *i2) and
+           ((*i1)->is_terminal() == (*i2)->is_terminal())) {
             assert(*i1);
             assert(*i2);
-            node_pairs.push_back(make_pair(*i1, *i2));
 
-            // Fill in table of pre-terminals while we're here
-            if ((*i1)->is_preterminal() and (*i2)->is_preterminal())
-               delta_ref_at(node_pair_deltas, *i1, *i2) =
-                  preterminal_leaves_value(include_leaves, decay_lambda);
-            else
-               delta_ref_at(node_pair_deltas, *i1, *i2) = 0.0;
-
+            // cout << "making a pair from " << (*i1)->id_string() << " AND " << (*i2)->id_string() << endl;
+            // Create entries for terminal productions if we're counting them
+            if ((*i1)->is_terminal()) {
+              if (include_leaves)
+                delta_ref_at(node_pair_deltas, *i1, *i2) = decay_lambda;
+            } else {
+              // will set recursively later
+              node_pairs.push_back(make_pair(*i1, *i2));
+            }
             ++i2;
          }
          i2 = run2_start;
@@ -174,8 +162,8 @@ double kernel_value(Sentence const& t1, Sentence const& t2,
         it != end; ++it) {
       Node const* n1 = it->first;
       Node const* n2 = it->second;
-      double delta = get_delta(delta_table, n1, n2, sigma,
-                               include_leaves, decay_lambda);
+      // cout << "Comparing " << n1->id_string() << " and " << n2->id_string() << endl;
+      double delta = get_delta(delta_table, n1, n2, sigma, decay_lambda);
       kernel += delta;
    }
 
