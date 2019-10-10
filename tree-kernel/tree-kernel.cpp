@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2011,2015 Jeff Donner
+Copyright (c) 2019 Matt Post
 
     Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation files
@@ -57,10 +58,6 @@ double get_delta(NodePairsDeltaTable& delta_table,
    assert((sigma == 0 or sigma == 1) or
           !"sigma isn't tunable, it's got to be 0 or 1; it's a choice of algorithm");
    double& ref_delta = delta_ref_at(delta_table, n1, n2);
-   // cout << "get_delta " << ref_delta << endl;
-   // cout << "  n1 = " << n1->id_string() << endl;
-   // cout << "  n2 = " << n2->id_string() << endl;
-   // cout << "  terminal: " << n1->is_terminal() << " " << n2->is_terminal() << endl;
 
    // compute delta if it's not been computed
    if (Node::productions_equal(n1, n2) and (not n1->is_terminal()) and (not n2->is_terminal()) and ref_delta == 0.0) {
@@ -76,10 +73,6 @@ double get_delta(NodePairsDeltaTable& delta_table,
        ref_delta *= sigma + get_delta(delta_table, *it1, *it2, sigma, lambda);
      }
    }
-   // cout << "get_delta " << ref_delta << endl;
-   // cout << "  n1 = " << n1->id_string() << endl;
-   // cout << "  n2 = " << n2->id_string() << endl;
-   // cout << "  terminal: " << n1->is_terminal() << " " << n2->is_terminal() << endl;
 
    return ref_delta;
 }
@@ -124,7 +117,7 @@ NodePairs find_non_zero_delta_pairs(
             assert(*i2);
 
             // cout << "making a pair from " << (*i1)->id_string() << " AND " << (*i2)->id_string() << endl;
-            // Fill in table of pre-terminals while we're here
+            // Create entries for terminal productions if we're counting them
             if ((*i1)->is_terminal()) {
               if (include_leaves)
                 delta_ref_at(node_pair_deltas, *i1, *i2) = decay_lambda;

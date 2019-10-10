@@ -1,5 +1,8 @@
 A C++ implementation of tree kernels per Alessandro Moschitti's 2006
-paper, "Making Tree Kernels Practical for Natural Language Learning"
+paper, "Making Tree Kernels Practical for Natural Language Learning".
+Contains extensions added in 2019 by Matt Post to work with CFGs
+containing rules with righthand sides of intermingled nonterminal
+and terminal symbols.
 
 This consists of two directories, tree-parser and tree-kernel itself.
 tree-parser parses Penn Treebank forms of sentences as produced by
