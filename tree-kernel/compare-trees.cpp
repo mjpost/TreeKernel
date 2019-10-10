@@ -55,14 +55,16 @@ int main(int argc, char **argv)
     vector<Tree const*> trees;
     string::size_type tabpos, startpos = 0;
     while ((tabpos = line.find("\t", startpos)) != string::npos) {
-      string tree = line.substr(startpos, tabpos - startpos);
-      Tree const* parsed_tree = make_tree(tree);
-      if (parsed_tree != NULL)
-        trees.push_back(parsed_tree);
+      if (tabpos > startpos) {
+        string tree = line.substr(startpos, tabpos - startpos);
+        Tree const* parsed_tree = make_tree(tree);
+        if (parsed_tree != NULL)
+          trees.push_back(parsed_tree);
+      }
 
       startpos = tabpos + 1;
     }
-    if (startpos != 0) {
+    if (startpos != 0 && startpos < line.length()) {
       string tree = line.substr(startpos);
       Tree const* parsed_tree = make_tree(tree);
       if (parsed_tree != NULL)
@@ -77,13 +79,12 @@ int main(int argc, char **argv)
       for (vector<Tree const*>::iterator tree2 = tree1 + 1;
            tree2 != trees.end();
            tree2++) {
-
         double overlap = kernel_value(*tree1, *tree2, all_trees, include_leaves, decay);
-        double norm = sqrt(kernel_value(*tree1, *tree1, all_trees, include_leaves, decay) * kernel_value(*tree2, *tree2, all_trees, include_leaves, decay));
+        if (normalize) {
+          double norm = sqrt(kernel_value(*tree1, *tree1, all_trees, include_leaves, decay) * kernel_value(*tree2, *tree2, all_trees, include_leaves, decay));
         score += overlap;
-        if (normalize)
           z += norm;
-        else
+        } else
           z = 1;
         // cout << "CMP\n" << *tree1 << endl << *tree2 << endl;
         // cout << z << endl << endl;
