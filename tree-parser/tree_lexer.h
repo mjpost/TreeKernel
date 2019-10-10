@@ -41,13 +41,13 @@ public:
     * Match all characters except open and close parens and space.
     */
    bool isLETTER() {
-     return (c != '(' and c != ')' and c != ' ');
+     return (c != '(' and c != ')' and ! isspace(c));
    }
 
 //   virtual std::string const& getTokenName(int x) const { return Lexer::s_token_names[x]; }
 
    virtual Token next_token() {
-//      cout << "lexer::next_token c:[" << this->c << "]" << endl;
+     //     std::cout << "lexer::next_token c:[" << this->c << "]" << std::endl;
       while ( this->c != Lexer::EOS ) {
          if (isspace(this->c)) {
             this->WS();

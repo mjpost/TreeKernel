@@ -1,18 +1,4 @@
-(ROOT
-  (S
-    (NP (NNP Never))
-    (VP (VBZ has)
-      (NP
-        (NP (DT the) (NN term))
-        (SBAR
-          (S (`` ``)
-            (S
-              (VP (VBG massaging)
-                (NP (DT the) (NNS media))))
-            ('' '')
-            (VP (VBD seemed)
-              (ADJP (RB so) (JJ accurate)))))))
-    (. .)))
+(ROOT (S (NP (NNP Never)) (VP (VBZ has) (NP (NP (DT the) (NN term)) (SBAR (S (`` ``) (S (VP (VBG massaging) (NP (DT the) (NNS media)))) ('' '') (VP (VBD seemed) (ADJP (RB so) (JJ accurate))))))) (. .)))
 (tag elt)
 (a b c d)
 (a b (c (d (e f))))
@@ -20,3 +6,4 @@
 ( (S (NP DT NNP) , (PP IN (NP PRP$ NN)) , (VP (VP VBZ ADVP VP) CC (VP VBZ S)) .))    ( (S (NP DT NNP) , (PP IN (NP PRP$ NN)) , (VP (VP VBZ ADVP VP) CC (VP VBZ S)) .))
 ( (S (NP (CD 4) (NNP Kemerovo) (NN group) (NNS members)) (VP (VBN arrested) (PP (IN in) (NP (NNP Estonia) (CC and) (NNP Spain))))) )
 ( (S (NP (CD Four) (NN Kemerovo)) (VP (VBN arrested) (PP (IN in) (NP (NNP Estonia) (CC and) (NNP Spain))))) )
+( (S (NP (NNP Aare)) (VP (VBD left) (NP (PRP$ his) (NN house)) (PP (IN in) (NP (NP (DT the) (NN village)) (PP (IN of) (NP (NNP KÃ¤rla))))) (PP (IN on) (NP (NNP Wednesday) (NN night))) (, ,) (PP (IN in) (NP (DT a) (NN direction) (NN unknown)))) (. .)) )
